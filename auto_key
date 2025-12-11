@@ -1,0 +1,35 @@
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+def auto_key_encryption(plain_txt, key, alphabet):
+    no_space_plain_txt = plain_txt.replace(" ", "")
+    if len(key) < len(no_space_plain_txt):
+        key += no_space_plain_txt[:len(no_space_plain_txt) - len(key)]
+    
+    key_index = [alphabet.index(k) for k in key]
+    txt_index = [alphabet.index(t) for t in no_space_plain_txt]
+    cipherd_list = []
+    for char,key in zip(txt_index, key_index):
+        c = (char + key) % len(alphabet)
+        cipherd_list.append(alphabet[c].upper())
+    cipherd_txt = "".join(cipherd_list)
+    return cipherd_txt
+print(auto_key_encryption("attack is today", "m", alphabet))
+
+def auto_key_decryption(cipherd_txt, key, alphabet):
+    plain_txt = ""
+    lower_ciphered_txt = cipherd_txt.lower()
+    
+    for i in range(len(lower_ciphered_txt)):
+        c_index = alphabet.index(lower_ciphered_txt[i])
+        key_index = alphabet.index(key[i])
+        p = (c_index - key_index) % len(alphabet)
+        if p >= 0:
+            plain_txt += alphabet[p]
+            key += alphabet[p] 
+        else:
+            plain_txt += alphabet[len(alphabet) - p]
+            key += alphabet[len(alphabet) - p]
+    return plain_txt
+print(auto_key_decryption("MTMTCMSALHRDY", 'm', alphabet ))
+        
+        
