@@ -1,0 +1,41 @@
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+def vigenere_encryption(plain_txt, key, alphabet):
+    ciphered_txt = ""
+    no_space_plain_txt = plain_txt.replace(" ", "")
+    
+    if len(key) < len(plain_txt):
+        num_repeats = (len(no_space_plain_txt) + len(key) - 1) // len(key)
+        repeated_key = (key * num_repeats)[:len(no_space_plain_txt)]
+        
+    key_index = [alphabet.index(k) for k in repeated_key]
+    txt_index = [alphabet.index(t) for t in no_space_plain_txt]
+    ciphered_list = []
+    for char,key in zip(txt_index, key_index):
+        c = (char + key) % len(alphabet)
+        ciphered_list.append(alphabet[c].upper())
+    cipherd_txt = "".join(ciphered_list)
+    return cipherd_txt
+
+def vigenere_decryption(cipherd_txt, key, alphabet):
+    lower_ciphered_txt = cipherd_txt.lower()
+    
+    if len(key) < len(lower_ciphered_txt):
+        num_repeats = (len(lower_ciphered_txt) + len(key) - 1) // len(key)
+        repeated_key = (key * num_repeats)[:len(lower_ciphered_txt)]
+        
+    key_index = [alphabet.index(k) for k in repeated_key]
+    txt_index = [alphabet.index(t) for t in lower_ciphered_txt]
+    plain_list = []
+    
+    for char, key in zip(txt_index, key_index):
+        p = (char - key) % len(alphabet)
+        if p >= 0:
+            plain_list.append(alphabet[p])
+        else:
+            plain_list.append(alphabet[len(alphabet)-p])
+    plain_txt = "".join(plain_list)
+    return plain_txt
+
+    
+    
