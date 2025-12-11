@@ -1,0 +1,33 @@
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+# C = (p+key)mod 26
+def additive_encryption(plain_txt, key, alphabet):
+    ciphered_txt=""
+    key_index = alphabet.index(key)
+    no_space_txt = plain_txt.replace(" ", "")
+    
+    for p in no_space_txt:
+        c= (alphabet.index(p) + key_index) % len(alphabet)
+        ciphered_txt += alphabet[c].upper()
+    
+    return ciphered_txt
+
+# p = (C-key) mod 26
+def additive_decryption(ciphered_txt, key, alphabet):
+    plain_txt = ""
+    key_index = alphabet.index(key)
+    lower_cipher_txt = ciphered_txt.lower()
+    
+    for c in lower_cipher_txt:
+        p = (alphabet.index(c) - key_index) % len(alphabet)
+        if p >= 0:
+            plain_txt += alphabet[p]
+        else:
+            plain_txt += alphabet[len(alphabet)-p]
+    return plain_txt
+
+
+# brute force attack
+def brute_force_attack(ciphered_txt, alphabet):
+    for a in alphabet:
+        print("Key = " + a + " , p = " + additive_decryption(ciphered_txt,a,alphabet))
+brute_force_attack("NKRRU", alphabet)
