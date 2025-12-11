@@ -1,0 +1,36 @@
+import math
+
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+# C = (p * k) mod 26
+def multiplicative_encryption(plain_txt, key, alphabet):
+    ciphered_txt = ""
+    key_index = alphabet.index(key)
+    no_space_txt = plain_txt.replace(" ", "")
+    
+    for p in no_space_txt:
+        c= (alphabet.index(p) * key_index) % len(alphabet)
+        ciphered_txt += alphabet[c].upper()
+    
+    return ciphered_txt
+# p = (C * (k**-1)) mod 26
+def multiplicative_decryption(ciphered_txt, key, alphabet):
+    plain_txt = ""
+    key_index = alphabet.index(key)
+    lower_ciphered_txt  = ciphered_txt.lower()
+    key_inverse = 0
+    
+    if math.gcd(key_index, len(alphabet)) != 1:
+        raise ValueError(f"Modular inverse of {key_index} modulo {len(alphabet)} does not exist.")
+    else:
+        key_inverse = pow(key_index, -1, len(alphabet))
+    
+    for c in lower_ciphered_txt:
+        p = (alphabet.index(c) * key_inverse) % len(alphabet)
+        plain_txt += alphabet[p]
+    return plain_txt
+    
+#brute force attack
+def brute_force_attack(ciphered_txt, alphabet):
+    for index,key in enumerate(alphabet):
+        if math.gcd(index, len(alphabet)) == 1:
+            print("Key = " + key + " p = " + multiplicative_decryption(ciphered_txt, key, alphabet))
