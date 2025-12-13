@@ -1,0 +1,50 @@
+import numpy as np
+
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
+def plain_txt_preprocessing(plain_txt):
+
+    #removing spaces and lowering the caps
+    no_space_plain_txt = plain_txt.replace(" ", "")
+    no_space_plain_txt = no_space_plain_txt.lower()
+
+    #Slicing the plain text to 2 chars:
+
+    # Converting the text into a list of characters
+    txt_list = [x for x in no_space_plain_txt]
+
+    # Adding the 'x' buffer between similar chars
+    for i in range(len(txt_list)):
+        if txt_list[i] ==  txt_list[i+1] and i%2 ==0:
+            txt_list.insert(i+1, 'x')
+        else:
+            continue
+    # Adding the 'Z' in the end, if necessary
+    if len(txt_list) % 2 != 0:
+        txt_list.append('z')
+
+    # Converting the text into pairs of 2 chars
+    combined_pairs = [x + y for x,y in zip(txt_list[::2],txt_list[1::2])]
+
+    return combined_pairs
+
+
+def creating_key_matrix(key,alphabet):
+
+    # Preprocessing the key
+    key = key.lower()
+    key = key.replace(" ", "")
+    key = key.replace('j','i')
+    alphabet.remove('j')
+
+    # Adding the key characters to the matrix
+    key_list = list(dict.fromkeys([x for x in key] + alphabet))
+
+    # Turning the Key list to a 5x5 matrix
+    key_matrix = np.array(key_list).reshape (5,5)
+    
+    return key_matrix
+
+
+
+
