@@ -1,0 +1,49 @@
+import numpy as np
+
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',0,1,2,3,4,5,6,7,8,9]
+
+
+def creating_first_key_matrix(key, alphabet):
+
+    alphabet_upper = [x.upper() if type(x) is str else x for x in alphabet]
+
+    # Key txt preprocessing
+    key_txt = key.replace(" ", "")
+    key_txt = key_txt.upper()
+
+    key_list = list(dict.fromkeys([x for x in key_txt] + alphabet_upper))
+
+    cipher_chars = ['A', 'D', 'F', 'G', 'V', 'X']
+    for i in range(6):
+         key_list.insert(i*7,cipher_chars[i])
+
+    key_list = [""] + cipher_chars + key_list
+
+    key_matrix = np.array(key_list).reshape(7,7)
+
+    return key_matrix
+
+matrix = creating_first_key_matrix('orange', alphabet)
+
+
+def adfgvx_encryption(plain_txt, key_matrix):
+
+    # Preprocessing plain txt
+    plain_txt = plain_txt.replace(" ", "")
+    plain_txt = plain_txt.upper()
+
+    # Searching the matrix and assigning the ADFGVX equivalent 
+    c_txt = []
+    for p in plain_txt:
+        for i in range(1,7):
+            for j in range(1,7):
+                if p == key_matrix[i][j]:
+                    c_txt.append(key_matrix[i][0] + key_matrix[0][j])
+
+    ciphered_txt = "".join(c_txt)
+    return ciphered_txt
+
+print(adfgvx_encryption("computer", matrix))
+
+
+
