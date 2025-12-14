@@ -1,0 +1,45 @@
+import math
+
+def key_stream_generation(key):
+    temp_vector = []
+    state_vector = []
+    key_vector = []
+
+    # Initialization
+    for i in range(256):
+        state_vector.append(i)
+        temp_vector.append(key[i % len(key)])
+
+    # Mixing
+    j = 0
+    for i in range(256):
+        j = (j + state_vector[i] + temp_vector[i]) % len(state_vector)
+        state_vector[i], state_vector[j] = state_vector[j], state_vector[i]
+
+    # KeyStram Generation
+    i = j = 0
+    while True:
+        i = (i + 1) % len(state_vector)
+        j = (j + state_vector[i]) % len(state_vector)
+        state_vector[i], state_vector[j] = state_vector[j], state_vector[i]
+        key_vector.append(state_vector[(state_vector[i] + state_vector[j]) % len(state_vector)])
+
+
+def change_point_test(bitstream, point):
+    n = len(bitstream)
+    ones_in_n = bitstream.count('1')
+    t = point
+    ones_in_t = bitstream.count('1', 0, t)
+    _max = abs(n*ones_in_t - t * ones_in_n)
+
+    p = math.e **(-((2*_max*_max)/(n*ones_in_n*(n-ones_in_n))))
+    return p
+print(change_point_test('10100010000101110001011000111010101010101010000001', 43))
+
+def binary_derivative_test(bitstream):
+    bitstream = [int(x) for x in bitstream]
+    derivative = []
+
+    for i in range(len(bitstream) -1):
+        derivative.append(bitstream[i] ^ bitstream[i+1])
+    return derivative
